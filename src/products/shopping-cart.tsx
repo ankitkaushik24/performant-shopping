@@ -1,46 +1,57 @@
-import { useState } from "react"
-import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button.tsx"
-import { Input } from "@/components/ui/input.tsx"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx"
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
 
 interface CartItem {
-  id: number
-  name: string
-  price: number
-  discount: number
-  quantity: number
+  id: number;
+  name: string;
+  price: number;
+  discount: number;
+  quantity: number;
 }
 
 const initialCartItems: CartItem[] = [
   { id: 1, name: "Leather Jacket", price: 199.99, discount: 10, quantity: 1 },
   { id: 2, name: "Denim Jeans", price: 59.99, discount: 0, quantity: 2 },
   { id: 3, name: "Sneakers", price: 89.99, discount: 5, quantity: 1 },
-]
+];
 
 export function ShoppingCartComponent() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems)
+  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
 
   const updateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity >= 0) {
-      setCartItems(cartItems.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      ))
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
     }
-  }
+  };
 
   const removeItem = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id))
-  }
+    setCartItems(cartItems.filter((item) => item.id !== id));
+  };
 
   const calculateFinalPrice = (item: CartItem) => {
-    const discountedPrice = item.price * (1 - item.discount / 100)
-    return (discountedPrice * item.quantity).toFixed(2)
-  }
+    const discountedPrice = item.price * (1 - item.discount / 100);
+    return (discountedPrice * item.quantity).toFixed(2);
+  };
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + parseFloat(calculateFinalPrice(item)), 0)
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + parseFloat(calculateFinalPrice(item)),
+    0
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -69,20 +80,26 @@ export function ShoppingCartComponent() {
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
                       <Input
                         type="number"
                         value={item.quantity}
-                        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                        onChange={(e) =>
+                          updateQuantity(item.id, parseInt(e.target.value))
+                        }
                         className="w-16 text-center"
                       />
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
@@ -90,7 +107,11 @@ export function ShoppingCartComponent() {
                   </TableCell>
                   <TableCell>${calculateFinalPrice(item)}</TableCell>
                   <TableCell>
-                    <Button variant="destructive" size="icon" onClick={() => removeItem(item.id)}>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => removeItem(item.id)}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </TableCell>
@@ -99,14 +120,10 @@ export function ShoppingCartComponent() {
             </TableBody>
           </Table>
           <div className="mt-8 flex flex-col items-end">
-            <p className="text-2xl font-bold">Total: ${totalPrice.toFixed(2)}</p>
-            <div className="mt-4 space-x-4">
-              <Button variant="outline" asChild>
-                <Link href="/products">
-                  <ShoppingBag className="mr-2 h-4 w-4" />
-                  Continue Shopping
-                </Link>
-              </Button>
+            <p className="text-2xl font-bold">
+              Total: ${totalPrice.toFixed(2)}
+            </p>
+            <div className="mt-4">
               <Button>Proceed to Checkout</Button>
             </div>
           </div>
@@ -114,14 +131,8 @@ export function ShoppingCartComponent() {
       ) : (
         <div className="text-center">
           <p className="text-xl mb-4">Your cart is empty</p>
-          <Button variant="outline" asChild>
-            <Link href="/products">
-              <ShoppingBag className="mr-2 h-4 w-4" />
-              Continue Shopping
-            </Link>
-          </Button>
         </div>
       )}
     </div>
-  )
+  );
 }

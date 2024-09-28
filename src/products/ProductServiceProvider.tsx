@@ -1,6 +1,5 @@
 import {
   useComputed,
-  useSignal,
   signal,
   computed,
   Signal,
@@ -8,8 +7,6 @@ import {
 } from "@preact/signals-react";
 import { CartItem, ProductType } from "./products.model";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
-
-type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 
 const calculateFinalPrice = (
   item: ProductType & { quantity: Signal<number> }
